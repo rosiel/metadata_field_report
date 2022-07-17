@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Module file for the field_report module.
+ */
+
+/**
+ * Implements hook_page_attachments().
+ */
+function metadata_field_report_page_attachments(array &$page) {
+  // Add our custom CSS.
+  if (\Drupal::routeMatch()->getRouteName() !== 'metadata_field_report.field_report_controller_getEntityBundles') {
+    $page['#attached']['library'][] = 'metadata_field_report/metadata_field-report';
+  }
+}
+
+/**
+ * Implements hook_file_download().
+ */
+function metadata_field_report_file_download($uri){
+  $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
+  $scheme = $stream_wrapper_manager->getScheme($uri);
+  $target = $stream_wrapper_manager->getTarget($uri);
+
+  if ($scheme == 'temporary' && $target) {
+    $request = \Drupal::request();
+    $route = $request->attributes->get('_route');
+    // Check if we were called by Features download route.
+    // No additional access checking needed here: route requires
+    // "export configuration" permission, token is validated by the controller.
+    // @see \Drupal\features\Controller\FeaturesController::downloadExport()
+    if ($route == 'metadata_field_report.download_bundle_report') {
+      return [
+        'Content-disposition' => 'attachment; filename="' . $target . '"',
+      ];
+    }
+  }
+}

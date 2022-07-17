@@ -1,0 +1,23 @@
+metadata_field_report.metadata_fields_report:
+  path: '/admin/reports/fields/metadata-field-report'
+  defaults:
+    _controller: '\Drupal\metadata_field_report\Controller\MetadataFieldReportController::getEntityBundles'
+    _title: 'Metadata Field Report'
+  requirements:
+    _permission: 'administer metadata_field_report'
+  options:
+    _admin_route: TRUE
+metadata_field_report.download_bundle_report:
+  path: '/admin/reports/fields/metadata-field-report/{entityKey}/{contentType}'
+  defaults:
+    _controller: '\Drupal\metadata_field_report\Controller\MetadataFieldReportController::downloadEntityReport'
+    _title: 'Download Field Report'
+  options:
+    _admin_route: 'TRUE'
+    parameters:
+      entityKey:
+        type: string
+      contentType:
+        type: string
+  requirements:
+    _permission: 'administer metadata_field_report'

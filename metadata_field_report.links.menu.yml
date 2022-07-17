@@ -1,0 +1,5 @@
+metadata_field_report.metadata_fields_report:
+  title: 'Metadata Field Report'
+  description: 'Detailed overview of fields on all entity bundles.'
+  route_name: metadata_field_report.metadata_fields_report
+  parent: entity.field_storage_config.collection

@@ -1,0 +1,4 @@
+metadata_field_report.metadata_fields_report:
+  route_name: metadata_field_report.metadata_fields_report
+  title: 'Metadata Field Report'
+  base_route: entity.field_storage_config.collection
