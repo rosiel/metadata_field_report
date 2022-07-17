@@ -2,12 +2,12 @@
 
 namespace Drupal\metadata_field_report\Controller;
 
+use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Link;
 use Drupal\field\FieldConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\field_report\Controller\FieldReportController;
 use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\system\FileDownloadController;
@@ -18,7 +18,7 @@ use Drupal\Core\Url;
  *
  * @package Drupal\metadata_field_report\Controller
  */
-class MetadataFieldReportController extends FieldReportController {
+class MetadataFieldReportController extends ControllerBase {
 
   /**
    * Entity field manager service.
@@ -187,7 +187,7 @@ class MetadataFieldReportController extends FieldReportController {
               ],
               '#attached' => [
                 'library' => [
-                  'field_report/field-report',
+                  'metadata-field-report/metadata-field-report',
                 ],
               ],
             ];

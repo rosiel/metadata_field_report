@@ -4,5 +4,3 @@ description: Generates a report page that organizes fields by content/entity typ
 core_version_requirement: ^8.8 || ^9.0
 dependencies:
   - drupal:field_ui
-  - drupal:field_report
-
