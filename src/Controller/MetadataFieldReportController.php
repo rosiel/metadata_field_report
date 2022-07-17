@@ -5,13 +5,13 @@ namespace Drupal\metadata_field_report\Controller;
 use Drupal\Core\Entity\EntityFieldManager;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Link;
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\field\FieldConfigInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\field_report\Controller\FieldReportController;
 use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Drupal\system\FileDownloadController;
+use Drupal\Core\Url;
 
 /**
  * Metadata Field Report Controller.
@@ -47,6 +47,7 @@ class MetadataFieldReportController extends FieldReportController {
    * @var \Drupal\system\FileDownloadController
    */
   protected $fileDownloadController;
+
   /**
    * Constructor.
    *
@@ -57,6 +58,7 @@ class MetadataFieldReportController extends FieldReportController {
    * @param \Drupal\Core\File\FileSystemInterface $fileSystem
    *   File system interface.
    * @param \Drupal\system\FileDownloadController $fileDownloadController
+   *   File downloader.
    */
   public function __construct(EntityFieldManager $entityFieldManager, EntityTypeManager $entityTypeManager, FileSystemInterface $fileSystem, FileDownloadController $fileDownloadController) {
     $this->entityFieldManager = $entityFieldManager;
@@ -162,7 +164,9 @@ class MetadataFieldReportController extends FieldReportController {
           $fieldListings[] = [
             '#type' => 'link',
             '#title' => $this->t('Download report'),
-            '#url' => \Drupal\Core\Url::fromRoute('metadata_field_report.download_bundle_report', ['entityKey'=> $entityKey, 'contentType' => $entityType->id() ]),
+            '#url' => Url::fromRoute(
+              'metadata_field_report.download_bundle_report',
+              ['entityKey' => $entityKey, 'contentType' => $entityType->id()]),
           ];
 
           // Output the entity description.
@@ -191,7 +195,7 @@ class MetadataFieldReportController extends FieldReportController {
           else {
             $fieldListings[] = [
               '#type' => 'markup',
-              '#markup' => $this->t("<p><b>No Fields are avaliable.</b></p>"),
+              '#markup' => $this->t("<p><b>No Fields are available.</b></p>"),
             ];
           }
 
@@ -228,19 +232,18 @@ class MetadataFieldReportController extends FieldReportController {
     return $fields;
   }
 
-  /*
+  /**
    * Helper function to return rows of fields for a given entity type.
    */
   protected function getRowsForBundle($entityKey, $entityType) {
     $fields = $this->entityTypeFields($entityKey, $entityType);
 
     foreach ($fields as $field => $field_array) {
-      $relatedBundles = [];
       $entityOptions = [];
       $targetBundles = ['n/a'];
       $create_new = 'n/a';
 
-      // Get the target bundles configured in Entity Reference fields
+      // Get the target bundles configured in Entity Reference fields.
       if ($field_array->get('field_type') == 'entity_reference') {
         $targetBundles = $field_array->get('settings')['handler_settings']['target_bundles'];
         $create_new = $field_array->get('settings')['handler_settings']['auto_create'] ? 'TRUE' : 'FALSE';
@@ -280,6 +283,7 @@ class MetadataFieldReportController extends FieldReportController {
         $field_array->get('description'),
         $field_array->get('required') ? 'TRUE' : 'FALSE',
         $field_array->get('translatable') ? 'TRUE' : 'FALSE',
+        $field_array->get('fieldStorage')->get('cardinality'),
         $targetBundlesRow,
         $create_new,
         $entityOptionsEditDelete,
@@ -288,7 +292,7 @@ class MetadataFieldReportController extends FieldReportController {
     return $rows;
   }
 
-  /*
+  /**
    * Helper function to return headers.
    */
   protected function getHeaders() {
@@ -299,8 +303,9 @@ class MetadataFieldReportController extends FieldReportController {
       $this->t('Field Description'),
       $this->t('Required'),
       $this->t('Translatable'),
+      $this->t('Cardinality'),
       $this->t('Target bundles'),
-      $this->t('Create if does not exist'),
+      $this->t('Auto Create'),
       $this->t('Options'),
     ];
   }
@@ -313,16 +318,15 @@ class MetadataFieldReportController extends FieldReportController {
    * @param string $contentType
    *   The content type name.
    *
-   * @return array
-   *   Returns an array of the fields.
+   * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+   *   Downloads you the file.
    */
   public function downloadEntityReport($entityKey, $contentType) {
     $headers = $this->getHeaders();
     $rows = $this->getRowsForBundle($entityKey, $contentType);
-    // Write to temp directory
     $filename_slug = "{$entityKey}__{$contentType}.csv";
     $filename = $this->fileSystem->getTempDirectory() . '/' . $filename_slug;
-    // Write file to filesystem
+    // Write file to temporary filesystem.
     if (file_exists($filename)) {
       $this->fileSystem->delete($filename);
     }
@@ -333,8 +337,7 @@ class MetadataFieldReportController extends FieldReportController {
     }
     fclose($fh);
     $request = new Request(['file' => $filename_slug]);
-
     return $this->fileDownloadController->download($request, 'temporary');
-
   }
+
 }
