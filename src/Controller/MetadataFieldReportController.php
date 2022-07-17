@@ -269,11 +269,7 @@ class MetadataFieldReportController extends ControllerBase {
         '#context' => ['list_style' => 'comma-list'],
       ];
 
-      $targetBundlesRow['data']['related']['data'] = [
-        '#theme' => 'item_list',
-        '#items' => $targetBundles,
-        '#context' => ['list_style' => 'comma-list'],
-      ];
+      $targetBundlesRow = implode(', ', $targetBundles);
 
       // Build out our table for the fields.
       $rows[] = [
@@ -324,6 +320,14 @@ class MetadataFieldReportController extends ControllerBase {
   public function downloadEntityReport($entityKey, $contentType) {
     $headers = $this->getHeaders();
     $rows = $this->getRowsForBundle($entityKey, $contentType);
+    // Remove render arrays (no need for edit links in downloaded file).
+    foreach ($rows as $row_key => $row) {
+      foreach ($row as $element_key => $element) {
+        if (gettype($element) == 'array') {
+          $rows[$row_key][$element_key] = '';
+        }
+      }
+    }
     $filename_slug = "{$entityKey}__{$contentType}.csv";
     $filename = $this->fileSystem->getTempDirectory() . '/' . $filename_slug;
     // Write file to temporary filesystem.
