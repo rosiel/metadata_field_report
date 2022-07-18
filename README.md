@@ -15,7 +15,7 @@ Add this git repository to your drupal site's composer.json:
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/igorw/monolog"
+            "url": "https://github.com/rosiel/metadata_field_report"
         }
     ],
 }
