@@ -24,7 +24,7 @@ Add this git repository to your drupal site's composer.json:
 Use composer to install this module:
 
 ```bash
-composer require drupal/metadata_field_report:dev-1.x
+composer require drupal/metadata_field_report:1.x-dev
 ```
 
 Use the Drupal GUI or Drush to install the module, then 
