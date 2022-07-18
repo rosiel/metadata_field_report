@@ -249,6 +249,12 @@ class MetadataFieldReportController extends ControllerBase {
         $create_new = $field_array->get('settings')['handler_settings']['auto_create'] ? 'TRUE' : 'FALSE';
       }
 
+      // Get the target bundles configured in Typed Relation fields.
+      if ($field_array->get('field_type') == 'typed_relation') {
+        $targetBundles = $field_array->get('settings')['handler_settings']['target_bundles'];
+        $create_new = $field_array->get('settings')['handler_settings']['auto_create'] ? 'TRUE' : 'FALSE';
+      }
+
       // Create the edit field URLs.
       if ($field_array->access('update') && $field_array->hasLinkTemplate("{$field_array->getTargetEntityTypeId()}-field-edit-form")) {
         $editRoute = $field_array->toUrl("{$field_array->getTargetEntityTypeId()}-field-edit-form");
