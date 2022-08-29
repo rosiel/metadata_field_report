@@ -1,7 +1,7 @@
 ## Metadata Field Report
 
 
-The Metadata Field Report module is a fork of the Field Report 
+The Metadata Field Report module is a fork of the [Field Report](https://www.drupal.org/project/field_report) 
 module by George Anderson. This module creates a report (nested
 under the 'Field List' report) that lists all bundle types and 
 their fields, along with field properties/settings. 
