@@ -1,5 +1,5 @@
 {
-    "name": "drupal/metadata_field_report",
+    "name": "rosiel/metadata_field_report",
     "type": "drupal-module",
     "description": "Generates an extended report page that organizes fields by content/entity type.",
     "keywords": [
