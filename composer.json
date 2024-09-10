@@ -27,6 +27,6 @@
         "source": "https://github.com/rosiel/metadata_field_report"
     },
     "require": {
-        "drupal/core": "^8.8 || ^9.0"
+        "drupal/core": "^9.3 || ^10"
     }
 }

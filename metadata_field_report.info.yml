@@ -1,6 +1,6 @@
 name: Metadata Field Report
 type: module
 description: Generates a report page that organizes fields by content/entity type.
-core_version_requirement: ^8.8 || ^9.0
+core_version_requirement: ^9.3 || ^10
 dependencies:
   - drupal:field_ui
