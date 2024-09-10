@@ -237,7 +237,7 @@ class MetadataFieldReportController extends ControllerBase {
    */
   protected function getRowsForBundle($entityKey, $entityType) {
     $fields = $this->entityTypeFields($entityKey, $entityType);
-
+    $rows = [];
     foreach ($fields as $field => $field_array) {
       $entityOptions = [];
       $targetBundles = ['n/a'];
@@ -245,8 +245,18 @@ class MetadataFieldReportController extends ControllerBase {
 
       // Get the target bundles configured in Entity Reference fields.
       if ($field_array->get('field_type') == 'entity_reference') {
-        $targetBundles = $field_array->get('settings')['handler_settings']['target_bundles'];
-        $create_new = $field_array->get('settings')['handler_settings']['auto_create'] ? 'TRUE' : 'FALSE';
+        if (array_key_exists('target_bundles', $field_array->get('settings')['handler_settings'])) {
+          $targetBundles = $field_array->get('settings')['handler_settings']['target_bundles'];
+        }
+        else {
+          $targetBundles = 'undefined';
+        }
+        if (array_key_exists('auto_create', $field_array->get('settings')['handler_settings'])) {
+          $create_new = $field_array->get('settings')['handler_settings']['auto_create'] ? 'TRUE' : 'FALSE';
+        }
+        else {
+          $create_new = 'undefined';
+        }
       }
 
       // Get the target bundles configured in Typed Relation fields.
@@ -275,7 +285,18 @@ class MetadataFieldReportController extends ControllerBase {
         '#context' => ['list_style' => 'comma-list'],
       ];
 
-      $targetBundlesRow = implode(', ', $targetBundles);
+      if (is_array($targetBundles)) {
+        $targetBundlesRow = implode(', ', $targetBundles);
+      }
+      elseif (is_string($targetBundles)) {
+        $targetBundlesRow = 'STRING: ' . $targetBundles;
+      }
+      elseif (is_null($targetBundles)) {
+        $targetBundlesRow = 'NONE SELECTED';
+      }
+      else {
+        $targetBundlesRow = 'unknown';
+      }
 
       // Build out our table for the fields.
       $rows[] = [
