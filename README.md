@@ -1,10 +1,10 @@
 ## Metadata Field Report
 
 
-The Metadata Field Report module is a fork of the [Field Report](https://www.drupal.org/project/field_report) 
+The Metadata Field Report module is a fork of the [Field Report](https://www.drupal.org/project/field_report)
 module by George Anderson. This module creates a report (nested
-under the 'Field List' report) that lists all bundle types and 
-their fields, along with field properties/settings. 
+under the 'Field List' report) that lists all bundle types and
+their fields, along with field properties/settings.
 
 This (actually maintained) contrib module may meet your needs:
 * [Entity Reports](https://www.drupal.org/project/entity_reports)
@@ -18,7 +18,7 @@ Add this git repository to your drupal site's composer.json:
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/rosiel/metadata_field_report"
+            "url": "https://github.com/roblib/metadata_field_report.git"
         }
     ],
 }
@@ -27,10 +27,10 @@ Add this git repository to your drupal site's composer.json:
 Use composer to install this module:
 
 ```bash
-composer require drupal/metadata_field_report:1.x-dev
+composer require roblib/metadata_field_report:1.x-dev
 ```
 
-Use the Drupal GUI or Drush to install the module, then 
+Use the Drupal GUI or Drush to install the module, then
 find the report at Reports > Field List > Metadata Field Report.
 
 ## Screenshot
@@ -46,13 +46,13 @@ Fields details listed include:
 - target entity types (for entity reference fields)
 - auto create (for entity reference fields)
 
-You can also click "Download report" under each bundle 
+You can also click "Download report" under each bundle
 type to download that bundle's info as a CSV.
 
 This should make it easier to manage metadata in fields.
 
 ## Maintainers
 
-This project is minimally maintained. Please see [Field Report](https://www.drupal.org/project/field_report) or [Entity Reports](https://www.drupal.org/project/entity_reports) 
+This project is minimally maintained. Please see [Field Report](https://www.drupal.org/project/field_report) or [Entity Reports](https://www.drupal.org/project/entity_reports)
 Rosie Le Faive (rosiel)
 https://github.com/rosiel
